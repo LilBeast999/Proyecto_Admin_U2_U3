@@ -11,6 +11,7 @@ services:
     volumes:
       - ./nginx-proxy-manager/data:/data
       - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+      - ./nginx-proxy-manager/custom_limits.conf:/etc/nginx/conf.d/custom_limits.conf:ro
     networks:
       - app-network
     depends_on:

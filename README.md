@@ -4,6 +4,8 @@
 
 Sistema de gestión de usuarios y tareas desarrollado con arquitectura de microservicios usando Node.js, Express, SQLite y Docker. El proyecto implementa un gateway Nginx Proxy Manager para el enrutamiento de peticiones entre servicios.
 
+OJO: si se desea probar, habra que regenerar los certificados SSL y toda la configuracion de dominios, ya que estos son generados por el Nginx Proxy Manager y no se incluyen en el repositorio. Para ello, se debe acceder al Nginx Proxy Manager y crear un nuevo proxy host con los dominios deseados, generando los certificados SSL correspondientes.
+
 ### Características Principales
 
 - **Arquitectura de Microservicios**: Separación de responsabilidades entre servicio de usuarios y tareas
