@@ -20,7 +20,7 @@ services:
 
   # servicio de usuarios
   user-service:
-    image: user-service:latest          # construir con: docker build -t user-service:latest user-service
+    image: user-service:latest         
     volumes:
       - user-data:/app/data  # persistencia de datos de usuarios
     environment:
@@ -38,10 +38,11 @@ services:
       replicas: 2
       restart_policy:
         condition: on-failure
+        delay: 15s
 
   # servicio de tareas
   task-service:
-    image: task-service:latest          # construir con: docker build -t task-service:latest task-service
+    image: task-service:latest         
     volumes:
       - task-data:/app/data  # persistencia de datos de tareas
     environment:
@@ -59,6 +60,7 @@ services:
       replicas: 2
       restart_policy:
         condition: on-failure
+        delay: 15s
 
 # definición de volúmenes para persistencia
 volumes:

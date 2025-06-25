@@ -271,8 +271,23 @@ docker-compose down -v
 ```
 
 
+# Comandos de Docker Swarm
 
+# Inicializar Docker Swarm (si no está activo)
+docker swarm init
 
+# Construir imágenes de Docker para cada servicio
+docker build -t nginx-proxy-manager-custom nginx-proxy-manager
+docker build -t user-service:latest user-service
+docker build -t task-service:latest task-service
+
+# crear una red overlay para Swarm
+docker network create -d overlay app-network
+# Inicializar Swarm (si no está activo)
+docker stack deploy -c docker-compose.yml proyecto_admin_u2_u3
+
+# Ver el estado de la pila
+docker stack services proyecto_admin_u2_u3
 
 **Desarrollado por**: Gustavo Torres  
 **Fecha**: Junio 2025  
