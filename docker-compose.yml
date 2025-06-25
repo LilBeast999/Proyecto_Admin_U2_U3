@@ -4,8 +4,7 @@ version: '3.8'
 services:
   # gateway nginx para enrutar peticiones a cada servicio
   nginx-proxy:
-    build: ./nginx-proxy-manager       # se construye la imagen localmente
-    container_name: nginx-proxy-manager       # nombre del contenedor modificado
+    image: nginx-proxy-manager-custom   # imagen local debe etiquetarse antes de desplegar
     ports:
       - "80:80"
       - "81:81"    # panel de administración
@@ -21,8 +20,7 @@ services:
 
   # servicio de usuarios
   user-service:
-    build: ./user-service
-    container_name: user-service
+    image: user-service:latest          # construir con: docker build -t user-service:latest user-service
     volumes:
       - user-data:/app/data  # persistencia de datos de usuarios
     environment:
@@ -43,8 +41,7 @@ services:
 
   # servicio de tareas
   task-service:
-    build: ./task-service
-    container_name: task-service
+    image: task-service:latest          # construir con: docker build -t task-service:latest task-service
     volumes:
       - task-data:/app/data  # persistencia de datos de tareas
     environment:
@@ -71,4 +68,4 @@ volumes:
 # red compartida para comunicación entre contenedores
 networks:
   app-network:
-    driver: bridge
+    external: true
