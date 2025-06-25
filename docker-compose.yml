@@ -2,7 +2,7 @@
 services:
   # gateway nginx para enrutar peticiones a cada servicio
   nginx-proxy:
-    image: jc21/nginx-proxy-manager:latest   # se usa Nginx Proxy Manager en lugar de Nginx tradicional
+    build: ./nginx-proxy-manager       # se construye la imagen localmente
     container_name: nginx-proxy-manager       # nombre del contenedor modificado
     ports:
       - "80:80"
@@ -11,7 +11,6 @@ services:
     volumes:
       - ./nginx-proxy-manager/data:/data
       - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
-      - ./nginx-proxy-manager/custom_limits.conf:/etc/nginx/conf.d/custom_limits.conf:ro
     networks:
       - app-network
     depends_on:
