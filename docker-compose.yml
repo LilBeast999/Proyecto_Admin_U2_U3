@@ -1,3 +1,5 @@
+version: '3.8'
+
 # define los servicios y la red de la aplicación
 services:
   # gateway nginx para enrutar peticiones a cada servicio
