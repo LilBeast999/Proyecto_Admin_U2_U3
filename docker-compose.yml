@@ -16,11 +16,8 @@ services:
     networks:
       - app-network
     depends_on:
-      # espera a que los servicios estén listos antes de arrancar
-      user-service:
-        condition: service_healthy
-      task-service:
-        condition: service_healthy
+      - user-service
+      - task-service
 
   # servicio de usuarios
   user-service:
