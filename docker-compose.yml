@@ -1,0 +1,67 @@
+# define los servicios y la red de la aplicación
+services:
+  # gateway nginx para enrutar peticiones a cada servicio
+  nginx-proxy:
+    image: jc21/nginx-proxy-manager:latest   # se usa Nginx Proxy Manager en lugar de Nginx tradicional
+    container_name: nginx-proxy-manager       # nombre del contenedor modificado
+    ports:
+      - "80:80"
+      - "81:81"    # panel de administración
+      - "443:443"  # soporte para HTTPS
+    volumes:
+      - ./nginx-proxy-manager/data:/data
+      - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+    networks:
+      - app-network
+    depends_on:
+      # espera a que los servicios estén listos antes de arrancar
+      user-service:
+        condition: service_healthy
+      task-service:
+        condition: service_healthy
+
+  # servicio de usuarios
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    volumes:
+      - user-data:/app/data  # persistencia de datos de usuarios
+    environment:
+      PORT: 5000
+    networks:
+      - app-network
+    healthcheck:
+      # verifica el estado cada 30s y espera respuesta http 200
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5000/health', res => {if(res.statusCode !== 200) process.exit(1)}).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # servicio de tareas
+  task-service:
+    build: ./task-service
+    container_name: task-service
+    volumes:
+      - task-data:/app/data  # persistencia de datos de tareas
+    environment:
+      PORT: 5001
+      USER_SERVICE_URL: "http://user-service:5000"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5001/health', res => {if(res.statusCode !== 200) process.exit(1)}).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+# definición de volúmenes para persistencia
+volumes:
+  user-data:
+  task-data:
+
+# red compartida para comunicación entre contenedores
+networks:
+  app-network:
+    driver: bridge
