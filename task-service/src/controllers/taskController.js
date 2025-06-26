@@ -1,3 +1,4 @@
+const os = require('os');
 const { runQuery } = require('../utils/db');  // Importar el db correcto
 const axios = require('axios');
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://user-service:5000';
@@ -17,7 +18,7 @@ exports.getAllTasks = async (req, res) => {
     }
     
     const tasks = await runQuery(query, params);
-    res.status(200).json(tasks);
+    res.status(200).json({ instance: os.hostname(), data: tasks });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -32,7 +33,7 @@ exports.getTaskById = async (req, res) => {
       return res.status(404).json({ error: 'Task not found' });
     }
     
-    res.status(200).json(tasks[0]);
+    res.status(200).json({ instance: os.hostname(), data: tasks[0] });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

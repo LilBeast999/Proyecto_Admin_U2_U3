@@ -1,5 +1,6 @@
 const db = require('../utils/db');
 const { runQuery } = require('../utils/db');
+const os = require('os');
 
 exports.createUser = async (req, res) => {
   try {
@@ -31,7 +32,7 @@ exports.createUser = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await runQuery('SELECT * FROM users');
-    res.status(200).json(users);
+    res.status(200).json({ instance: os.hostname(), data: users });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -53,7 +54,7 @@ exports.getUserById = async (req, res) => {
     }
     
     // devolver el usuario (no un array)
-    res.status(200).json(users[0]);
+    res.status(200).json({ instance: os.hostname(), data: users[0] });
   } catch (error) {
     console.error(`Error fetching user ${req.params.id}:`, error.message);
     res.status(500).json({ error: error.message });
