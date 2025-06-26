@@ -4,7 +4,7 @@ version: '3.8'
 services:
   # gateway nginx para enrutar peticiones a cada servicio
   nginx-proxy:
-    image: jc21/nginx-proxy-manager:latest
+    image: nginx-proxy-manager-custom   # imagen local debe etiquetarse antes de desplegar
     ports:
       - "80:80"
       - "81:81"    # panel de administración
