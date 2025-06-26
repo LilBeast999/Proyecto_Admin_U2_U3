@@ -207,6 +207,25 @@ curl.exe -i -X POST http://localhost/api/tasks `
 docker start user-service
 ```
 
+## 📊 Comparativa Pruebas DoS (con mitigaciones)
+
+| Concurrencia                    | Estado                | Complete | Failed  | Non-2xx | RPS    | Latencia media (ms) | Transfer rate (KB/s) |
+|---------------------------------|-----------------------|----------|---------|---------|--------|---------------------|----------------------|
+| 5000                            | Timeout               | –        | –       | –       | –      | 70007               | –                    |
+| 1200                            | Completada            | 100 000  | 94 869  | 91 874  | 361.35 | 3320.843            | 151.13               |
+| 1600                            | Completada            | 100 000  | 95 078  | 87 636  | 326.73 | 4897.004            | 131.92               |
+| 1200 (réplica caída a mitad)    | Completada            | 100 000  | 94 489  | 92 089  | 330.65 | 3629.193            | 140.67               |
+| 1600 (con réplica caída a mitad) | Completada            | 100 000  | 94 455  | 89 817  | 312.24 | 5124.268            | 130.62               |
+
+## 📊 Comparativa DoS (sin mitigaciones)
+| Concurrencia | Estado     | Complete | Failed | Non-2xx |   RPS   | Latencia media (ms) | Transfer rate (KB/s) |
+|-------------:|------------|---------:|-------:|--------:|--------:|--------------------:|---------------------:|
+|         1200 | Completada |   100000 |    432 |     432 |  238.46 |             5032.21 | 190.96               |
+|         1400 | Completada |   100000 |    599 |     599 |  235.59 |             5942.53 | 188.51               |
+|         1600 | Completada |   100000 |   2429 |    2429 |  237.03 |             6750.16 | 186.31               |
+
+
+
 ## 🛠️ Tecnologías Utilizadas
 
 - **Backend**: Node.js v24 + Express.js
